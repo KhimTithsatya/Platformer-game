@@ -1,20 +1,32 @@
+
+
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed;
-    private Rigidbody2D body;
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float jumpForce = 7f;
+    private Rigidbody2D rb;
 
     private void Awake()
     {
-        body = GetComponent<Rigidbody2D>();
+        // Get the Rigidbody2D component
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        body.linearVelocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.linearVelocity.y);
+        // Get horizontal movement input (A/D or Arrow keys)
+        float direction = Input.GetAxis("Horizontal");
 
-        if (Input.GetKey(KeyCode.Space))
-            body.linearVelocity = new Vector2(body.linearVelocity.x, speed);
+        // Move the player horizontally
+        rb.linearVelocity = new Vector2(direction * speed, rb.linearVelocity.y);
+
+        // Jump when Space key is pressed
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
     }
 }
